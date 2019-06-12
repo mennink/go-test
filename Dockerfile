@@ -12,12 +12,15 @@ WORKDIR $GOPATH/src/github.com/mennink/go-test
 # Copy everything from the current directory to the PWD(Present Working Directory) inside the container
 COPY . .
 
-# Download all the dependencies
-# https://stackoverflow.com/questions/28031603/what-do-three-dots-mean-in-go-command-line-invocations
+# Download dependencies
 RUN go get -d -v ./...
+
+# Build the Go app
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/bin/wiki .
 
 # Install the package
 RUN go install -v ./...
+RUN mv /go/bin/wiki /wiki
 
 # This container exposes port 8080 to the outside world
 EXPOSE 8080
