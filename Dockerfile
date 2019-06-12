@@ -20,7 +20,11 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/bin/wiki .
 
 # Install the package
 RUN go install -v ./...
-RUN mv /go/bin/wiki /wiki
+WORKDIR /root/
+
+RUN mv /go/bin/wiki /root/wiki
+COPY tmpl/ tmpl/
+COPY data/ data/
 
 # This container exposes port 8080 to the outside world
 EXPOSE 8080
